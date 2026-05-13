@@ -2,14 +2,14 @@ import numpy as np
 from scipy.special import gammaln
 from scipy.stats import t as tdist
 
-def negloglike_clayton(alpha, u):
+def negloglike_clayton(alpha, u, return_hessian=False):
     powu = u**-alpha
     lnu = np.log(u)
     logC = (-1./alpha)*np.log(np.sum(powu, axis=1) - 1)
     logy = np.log(alpha+1) + (2.*alpha+1.)*logC - (alpha+1.)*np.sum(lnu, axis=1)
     nll = -np.sum(logy)
     
-    if nargout > 1:
+    if return_hessian:
         dlogy = 1./(1+alpha) - logC/alpha + (2+1./alpha)*np.sum(powu*lnu, axis=1)**2 / (np.sum(powu, axis=1) - 1)  - np.sum(lnu, axis=1)
         d2 = np.sum(dlogy**2)
         return nll, d2
