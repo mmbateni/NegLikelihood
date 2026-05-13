@@ -6,7 +6,7 @@ negloglike_frank <- function(alpha, u) {
     logy <- 2 * alpha * apply(u - 0.5, 1, prod) # -> zero as alpha -> 0
   } else {
     logy <- log(-alpha * expm1(-alpha)) + alpha * sumu -
-      2 * log(abs(1 + exp(alpha * (sumu - 1)) - sum(expau, 2)))
+      2 * log(abs(1 + exp(alpha * (sumu - 1)) - rowSums(expau)))
   }
   nll <- -sum(logy)
     # Return approximate 2nd derivative of the neg loglikelihood,
@@ -16,7 +16,7 @@ negloglike_frank <- function(alpha, u) {
     } else {
       dlogy <- 1 / alpha + 1 / expm1(alpha) + sumu -
         2 * ((sumu - 1) * exp(alpha * (sumu - 1)) - rowSums(u * expau)) /
-        (1 + exp(alpha * (sumu - 1)) - sum(expau, 2))
+        (1 + exp(alpha * (sumu - 1)) - rowSums(expau))
     }
     d2 <- sum(dlogy^2)
     return(list(nll = nll, d2 = d2, dlogy = dlogy))
