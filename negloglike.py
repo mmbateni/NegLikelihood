@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.special import gammaln
 from scipy.stats import t as tdist
+from scipy.stats import norm
 
 def negloglike_clayton(alpha, u, return_hessian=False):
     powu = u**-alpha
