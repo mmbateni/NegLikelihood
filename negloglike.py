@@ -4,6 +4,8 @@ from scipy.stats import t as tdist
 from scipy.stats import norm
 
 def negloglike_clayton(alpha, u, return_hessian=False):
+    # 1. Force alpha to be a pure scalar float
+    alpha = float(alpha)
     powu = u**-alpha
     lnu = np.log(u)
     logC = (-1./alpha)*np.log(np.sum(powu, axis=1) - 1)
@@ -39,12 +41,15 @@ def negloglike_frank(alpha, u, return_hessian=False):
     return nll
 
 def negloglike_gs(rho, u):
+    rhohat = float(rhohat)
     x = scipy.stats.norm.ppf(u[:,0])
     y = scipy.stats.norm.ppf(u[:,1])
     F = -np.sum(np.log( (1-rho**2)**(-.5) * np.exp((x**2 + y**2)/2 + (2*rho*x*y - x**2 - y**2)/(2*(1-rho**2))) ))
     return F
 
 def negloglike_gumbel(alpha, u):
+    # 1. Force alpha to be a pure scalar float
+    alpha = float(alpha)
     v = -np.log(u)
     v = np.sort(v, axis=1)
     vmin = v[:,0]
