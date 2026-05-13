@@ -17,7 +17,9 @@ def negloglike_clayton(alpha, u, return_hessian=False):
     
     return nll
 
-def negloglike_frank(alpha, u):
+def negloglike_frank(alpha, u, return_hessian=False):
+    # 1. Force alpha to be a pure scalar float
+    alpha = float(alpha)
     expau = np.exp(alpha * u)
     sumu = np.sum(u, axis=1)
     if np.abs(alpha) < 1e-5:
