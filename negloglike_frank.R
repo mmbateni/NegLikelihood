@@ -3,7 +3,7 @@ negloglike_frank <- function(alpha, u) {
   expau <- exp(alpha * u)
   sumu <- rowSums(u)
   if (abs(alpha) < 1e-5) {
-    logy <- 2 * alpha * prod(u - 0.5, 2) # -> zero as alpha -> 0
+    logy <- 2 * alpha * apply(u - 0.5, 1, prod) # -> zero as alpha -> 0
   } else {
     logy <- log(-alpha * expm1(-alpha)) + alpha * sumu -
       2 * log(abs(1 + exp(alpha * (sumu - 1)) - sum(expau, 2)))
@@ -12,7 +12,7 @@ negloglike_frank <- function(alpha, u) {
     # Return approximate 2nd derivative of the neg loglikelihood,
     # using -E[score^2] = E[hessian]
     if (abs(alpha) < 1e-5) {
-      dlogy <- 2 * prod(u - 0.5, 2)
+      dlogy <- 2 * apply(u - 0.5, 1, prod)
     } else {
       dlogy <- 1 / alpha + 1 / expm1(alpha) + sumu -
         2 * ((sumu - 1) * exp(alpha * (sumu - 1)) - rowSums(u * expau)) /
